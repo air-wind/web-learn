@@ -1,0 +1,19 @@
+{
+  "name": "02nodejs",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A Node.js project with basic setup and logic.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

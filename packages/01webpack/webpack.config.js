@@ -1,11 +1,11 @@
 const path = require("path");
-const { loadEnvFile } = require("process");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const webpack = require("webpack");
 
 module.exports = {
+  cache: false,
   devtool: "source-map", // 生成 source map
   entry: "./src/index.ts", // 入口文件
   output: {
@@ -34,7 +34,32 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/, // 匹配 .ts 文件
-        use: "ts-loader", // 使用 ts-loader 处理
+        use: [
+          {
+            // babel-loader 是webpack 与 babel通信的桥梁，@babel/core 是将js转换为AST, @babel/preset-env 是将ES6+转换为ES5的预设规则库
+            loader: "babel-loader", // 使用 babel-loader 处理
+            options: {
+              sourceType: "unambiguous", // 设置为 "unambiguous" 以支持 ES6 模块ss
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    useBuiltIns: "usage",
+                    corejs: "3",
+                  },
+                ],
+                "@babel/preset-typescript",
+              ], // 使用 @babel/preset-env 预设
+            },
+          },
+          {
+            loader: "my-loader", // 使用自定义 loader
+            options: {
+              name: "my-loader",
+            },
+          },
+          "ts-loader",
+        ], // 使用 ts-loader 处理
         exclude: /node_modules/,
       },
       // {
@@ -71,23 +96,12 @@ module.exports = {
           "postcss-loader", // 处理 CSS 前缀
         ],
       },
-      // babel-loader 是webpack 与 babel通信的桥梁，@babel/core 是将js转换为AST, @babel/preset-env 是将ES6+转换为ES5的预设规则库
-      {
-        test: /\.m?js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader", // 使用 babel-loader 处理
-          options: {
-            presets: [
-              "@babel/preset-env",
-              {
-                useBuiltIns: "usage", // 按需加载 polyfill
-              },
-            ], // 使用 @babel/preset-env 预设
-          },
-        },
-      },
     ],
+  },
+  resolveLoader: {
+    alias: {
+      "my-loader": path.resolve(__dirname, "custom-loader.js"),
+    },
   },
   mode: "production", // 打包模式
 };

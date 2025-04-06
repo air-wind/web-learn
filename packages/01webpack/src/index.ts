@@ -1,5 +1,3 @@
-import "@babel/polyfill"
-
 import image from "../assets/image.png";
 
 import "./style.css";
@@ -16,7 +14,7 @@ btn.onclick = function () {
 
   // es6 语法转换
   const sayHello = () => {
-    const message = `Hello ES${6}`;
+    const message = `Hello ES${div.innerHTML}`;
     console.log(message);
   };
   class Demo {}

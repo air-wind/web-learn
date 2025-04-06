@@ -3,6 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const webpack = require("webpack");
+const { MyPlugin } = require("./custom-plugin.mjs");
 
 module.exports = {
   cache: false,
@@ -29,6 +30,9 @@ module.exports = {
     }),
     new CleanWebpackPlugin.CleanWebpackPlugin(), // 清理输出目录
     new webpack.HotModuleReplacementPlugin(), // 热更新插件, webpack 5.x 版本中配置了hot:true, 会隐式启用
+    new MyPlugin({
+      name: "my-plugin",
+    }), // 自定义插件
   ],
   module: {
     rules: [
